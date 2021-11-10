@@ -18,3 +18,5 @@ import addFormats from "https://esm.sh/ajv-formats@2.1.1";
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 export { ajv };
+
+export { parse as flagsParse } from "https://deno.land/std/flags/mod.ts";
