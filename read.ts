@@ -1,7 +1,14 @@
 import { Format } from "./write.ts";
 import { tomlParse, yamlParse } from "./deps.ts";
 
+export enum Encoding {
+  Bytes = 0,
+  String = 1,
+  JSON = 2,
+}
+
 export interface ReadOptions {
+  encoding?: Encoding;
   format?: Format;
 }
 
@@ -20,30 +27,41 @@ export function valuesFormatFromPath(path: string): Format {
   }
 }
 
-export async function read(
-  path = "",
-  opts: ReadOptions = {},
-): Promise<Record<string, never>> {
-  const { format = Format.FromExtension } = opts;
+export async function read(path = "", opts: ReadOptions = {}): Promise<any> {
+  const { encoding = Encoding.JSON, format = Format.FromExtension } = opts;
   let readFormat = format;
   if (readFormat === Format.FromExtension && path) {
     readFormat = valuesFormatFromPath(path);
   }
   const text = await Deno.readTextFile(path);
-  const promise = new Promise<Record<string, never>>((resolve, reject) => {
-    // the resolve / reject functions control the fate of the promise
-    switch (readFormat) {
-      case Format.JSON:
-        resolve(JSON.parse(text));
+  const promise = new Promise<any>((resolve, reject) => {
+    switch (encoding) {
+      case Encoding.String:
+        resolve(text);
         break;
-      case Format.YAML:
-        resolve(yamlParse(text) as any);
+      case Encoding.Bytes:
+        resolve(new TextEncoder().encode(text));
         break;
-      case Format.TOML:
-        resolve(tomlParse(text) as any);
-        break;
+      case Encoding.JSON:
+        switch (readFormat) {
+          case Format.JSON:
+            resolve(JSON.parse(text));
+            break;
+          case Format.YAML:
+            resolve(yamlParse(text) as any);
+            break;
+          case Format.TOML:
+            resolve(tomlParse(text) as any);
+            break;
+          case Format.RAW:
+            resolve(text);
+            break;
+          default:
+            reject(new Error(`unknown format: ${format}`));
+            break;
+        }
       default:
-        reject(new Error(`unknown format: ${format}`));
+        reject(new Error(`unknown encoding: ${encoding}`));
         break;
     }
   });
