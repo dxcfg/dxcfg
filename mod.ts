@@ -5,3 +5,4 @@ export { validateWithFile, validateWithObject } from "./schema.ts";
 import * as param from "./param.ts";
 export { param };
 export { parse, stringify } from "./parse.ts";
+export { dir, info } from "./fs.ts";

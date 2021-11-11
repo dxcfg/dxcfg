@@ -20,3 +20,4 @@ addFormats(ajv);
 export { ajv };
 
 export { parse as flagsParse } from "https://deno.land/std/flags/mod.ts";
+export { basename } from "https://deno.land/std/path/mod.ts";
