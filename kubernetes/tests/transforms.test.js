@@ -1,5 +1,5 @@
 import { patchResource, rewriteImageRefs } from '../src/transform/index.js';
-import { apps } from '../src/api.ts';
+import { v1 as apps } from "https://deno.land/x/deploykit@0.0.22/generated/k8s/v1.18.3/api/apps/mod.ts";
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 
 // for the match predicate
@@ -43,8 +43,9 @@ Deno.test('patch something', () => {
 });
 
 Deno.test('naive rewriteImageRefs', () => {
-  const dep = new apps.v1.Deployment('foo', {
+  const dep = new apps.createDeployment({
     metadata: {
+      name: 'foo',
       namespace: 'foons',
     },
     spec: {

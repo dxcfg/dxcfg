@@ -1,8 +1,8 @@
 import { compile } from '../src/overlay/compile.js';
 import { fs, Encoding } from './mock.js';
-import { core } from '../src/api.ts';
+import { v1 as core } from "https://deno.land/x/deploykit@0.0.22/generated/k8s/v1.18.3/api/core/mod.ts";
 import { merge, deepWithKey } from '../../mod.ts';
-import { assertEquals, assertObjectMatch } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 
 Deno.test('trivial overlay: no bases, resources, patches', () => {
   const { read } = fs({}, {});
@@ -212,13 +212,19 @@ Deno.test('generate resources', () => {
     './bar': { string: 'foo' },
   };
 
-  const configmap = new core.v1.ConfigMap('foobar', {
+  const configmap = new core.createConfigMap({
+    metadata: {
+      name: 'foobar',
+    },
     data: {
       'foo': 'bar',
       'bar': 'foo',
     }
   });
-  const secret = new core.v1.Secret('ssshh', {
+  const secret = new core.createSecret({
+    metadata: {
+      name: 'ssshh',
+    },
     data: {
       'foo': 'Zm9vYmFy',
     }
