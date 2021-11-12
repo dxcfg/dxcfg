@@ -1,0 +1,27 @@
+{
+  "name": "guestbook-ts",
+  "version": "1.0.0",
+  "description": "Kubernetes stateless example",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkcfg/kubernetes.git"
+  },
+  "main": "guestbook.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "kubernetes",
+    "jk",
+    "example"
+  ],
+  "author": "The jk Authors",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "typescript": "^3.4.4"
+  },
+  "dependencies": {
+    "@jkcfg/std": "^0.2.3",
+    "@jkcfg/kubernetes": "^0.2.0"
+  }
+}

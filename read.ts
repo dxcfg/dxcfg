@@ -60,6 +60,7 @@ export async function read(path = "", opts: ReadOptions = {}): Promise<any> {
             reject(new Error(`unknown format: ${format}`));
             break;
         }
+        break;
       default:
         reject(new Error(`unknown encoding: ${encoding}`));
         break;
