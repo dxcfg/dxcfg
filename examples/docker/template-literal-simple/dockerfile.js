@@ -1,7 +1,7 @@
-import { param } from 'https://deno.land/x/dxcfg/mod.ts';
+import { param } from 'https://deno.land/x/dxcfg@v0.0.3/mod.ts';
 
 // input is the the 'service' input parameter.
-const input = param.Object('service');
+const input = param.object('service');
 
 // Our docker images are based on alpine
 const baseImage = 'alpine:3.8';
