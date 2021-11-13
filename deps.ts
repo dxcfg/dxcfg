@@ -22,7 +22,7 @@ export { ajv };
 export { parse as flagsParse } from "https://deno.land/std/flags/mod.ts";
 export { basename } from "https://deno.land/std/path/mod.ts";
 
-import set from "http://deno.land/x/lodash@4.17.15-es/set.js";
+import set from "https://deno.land/x/lodash@4.17.15-es/set.js";
 export { set as setValue };
-import get from "http://deno.land/x/lodash@4.17.15-es/get.js";
+import get from "https://deno.land/x/lodash@4.17.15-es/get.js";
 export { get as getValue };
