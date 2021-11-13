@@ -1,4 +1,4 @@
-import { write, param } from 'https://deno.land/x/dxcfg@v0.0.4/mod.ts';
+import { write, param } from '../../deps.ts'
 
 // input is the the 'service' input parameter.
 const input = await param.object('service');

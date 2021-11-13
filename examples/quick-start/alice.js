@@ -1,4 +1,4 @@
-import { write } from 'https://deno.land/x/dxcfg@v0.0.4/mod.ts'
+import { write } from '../deps.ts'
 const alice = {
     name: 'Alice',
     beverage: 'Club-Mate',
