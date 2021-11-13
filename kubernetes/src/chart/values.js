@@ -14,7 +14,7 @@ import { merge } from '../../../mod.ts';
 // ```
 const values = (param, opts = {}) => function compile(defaults) {
   const { prefix = 'values' } = opts;
-  const commandLine = param.Object(prefix, {});
+  const commandLine = param.object(prefix, {});
   return merge(defaults, commandLine);
 };
 
