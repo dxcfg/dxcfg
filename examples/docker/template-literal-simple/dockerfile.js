@@ -1,7 +1,7 @@
-import { param } from 'https://deno.land/x/dxcfg@v0.0.3/mod.ts';
+import { write, param } from 'https://deno.land/x/dxcfg@v0.0.4/mod.ts';
 
 // input is the the 'service' input parameter.
-const input = param.object('service');
+const input = await param.object('service');
 
 // Our docker images are based on alpine
 const baseImage = 'alpine:3.8';
@@ -15,8 +15,4 @@ COPY ${service.name} /
 ENTRYPOINT /${service.name}
 `;
 
-// Instruct generate to produce a Dockerfile with the value returned by the
-// Dockerfile function.
-export default [
-    { path: 'Dockerfile', value: Dockerfile(input) },
-];
+await write(Dockerfile(input), 'Dockerfile');
