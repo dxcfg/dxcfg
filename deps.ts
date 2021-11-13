@@ -1,5 +1,6 @@
 export {
   parse as yamlParse,
+  parseAll as yamlParseAll,
   stringify as yamlStringify,
 } from "https://deno.land/std/encoding/yaml.ts";
 export {
@@ -30,3 +31,5 @@ export { get as getValue };
 export { encode as base64encode } from "https://deno.land/std/encoding/base64.ts";
 import HandlebarsJS from "https://dev.jspm.io/handlebars@4.7.6";
 export { HandlebarsJS };
+import readJsonLines from "https://cdn.skypack.dev/read-json-lines-sync?dts";
+export { readJsonLines };

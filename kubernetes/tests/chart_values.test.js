@@ -2,7 +2,7 @@ import { values } from '../src/chart/values.js';
 import { assertEquals } from "../../deps.ts";
 
 function params(obj = {}) {
-  return { Object: (k, d) => (obj.hasOwnProperty(k)) ? obj[k] : d };
+  return { object: (k, d) => (obj.hasOwnProperty(k)) ? obj[k] : d };
 }
 
 Deno.test('empty values and empty defaults', () => {

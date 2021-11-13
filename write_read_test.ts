@@ -1,6 +1,6 @@
 import { assertEquals } from "./deps.ts";
 import { write } from "./write.ts";
-import { read } from "./read.ts";
+import { read, readSync } from "./read.ts";
 
 const expected = {
   name: "Alice",
@@ -30,4 +30,19 @@ Deno.test("write and read yaml: format from file extension", async () => {
 
 Deno.test("write and read toml: format from file extension", async () => {
   await runWriteReadTest(Deno.makeTempFileSync({ suffix: ".toml" }));
+});
+
+Deno.test("write and read multi json", () => {
+  const multiJsonStr = `{"a":"b"}
+{"x":"y"}`;
+
+  const multiJson = [{
+    a: "b",
+  }, {
+    x: "y",
+  }];
+  const tmp = Deno.makeTempFileSync({ suffix: ".json" });
+  Deno.writeTextFileSync(tmp, multiJsonStr);
+  const actual = readSync(tmp);
+  assertEquals(actual, multiJson);
 });
