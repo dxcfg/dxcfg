@@ -1,5 +1,5 @@
 import { assertEquals } from "./deps.ts";
-import { write } from "./write.ts";
+import { Format, write } from "./write.ts";
 import { read, readSync } from "./read.ts";
 
 const expected = {
@@ -32,7 +32,7 @@ Deno.test("write and read toml: format from file extension", async () => {
   await runWriteReadTest(Deno.makeTempFileSync({ suffix: ".toml" }));
 });
 
-Deno.test("write and read multi json", () => {
+Deno.test("read multi json", () => {
   const multiJsonStr = `{"a":"b"}
 {"x":"y"}`;
 
@@ -45,4 +45,50 @@ Deno.test("write and read multi json", () => {
   Deno.writeTextFileSync(tmp, multiJsonStr);
   const actual = readSync(tmp);
   assertEquals(actual, multiJson);
+});
+
+Deno.test("read and write multi json", async () => {
+  const multiJson = [{
+    a: "b",
+  }, {
+    x: "y",
+  }];
+  const tmp = Deno.makeTempFileSync({ suffix: ".json" });
+  await write(multiJson, tmp, { format: Format.MULTI_JSON });
+  const actual = await read(tmp);
+  assertEquals(actual, multiJson);
+});
+
+Deno.test("read multi yaml", () => {
+  const multiYamlStr = `
+---
+id: 1
+name: Alice
+---
+id: 2
+name: Bob
+---
+id: 3
+name: Eve
+  `;
+
+  const multiYaml = [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, {
+    id: 3,
+    name: "Eve",
+  }];
+  const tmp = Deno.makeTempFileSync({ suffix: ".yaml" });
+  Deno.writeTextFileSync(tmp, multiYamlStr);
+  const actual = readSync(tmp);
+  assertEquals(actual, multiYaml);
+});
+
+Deno.test("read write multi yaml", async () => {
+  const multiYaml = [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }, {
+    id: 3,
+    name: "Eve",
+  }];
+  const tmp = Deno.makeTempFileSync({ suffix: ".yaml" });
+  await write(multiYaml, tmp, { format: Format.MULTI_YAML });
+  const actual = await read(tmp);
+  assertEquals(actual, multiYaml);
 });

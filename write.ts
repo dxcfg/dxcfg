@@ -65,7 +65,7 @@ export function formatText(
       if (!Array.isArray(value)) {
         throw new Error("expected array for Format.MULTI_JSON");
       }
-      return value.map((v) => JSON.stringify(v, null, indent)).join(
+      return value.map((v) => JSON.stringify(v)).join(
         "\n",
       );
     case Format.JSON:

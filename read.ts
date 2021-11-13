@@ -35,8 +35,6 @@ function parseText(text: string, encoding: Encoding, readFormat: Format): any {
       return new TextEncoder().encode(text);
     case Encoding.JSON:
       switch (readFormat) {
-        case Format.JSON:
-          return JSON.parse(text);
         case Format.MULTI_JSON: {
           const arr = readJsonLines(text);
           if (arr.length <= 1) {
@@ -46,13 +44,11 @@ function parseText(text: string, encoding: Encoding, readFormat: Format): any {
         }
         case Format.MULTI_YAML:
           if (!text.includes("---\n")) {
-            return yamlParse(text) as any;
+            return yamlParse(text);
           }
-          return yamlParseAll(text) as any;
-
+          return yamlParseAll(text);
         case Format.TOML:
-          return tomlParse(text) as any;
-
+          return tomlParse(text);
         case Format.RAW:
           return text;
 
