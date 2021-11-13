@@ -1,6 +1,5 @@
 import { transform, valueMap, mapper, drop } from './transform.js';
-import { v1 as core } from "https://deno.land/x/deploykit@0.0.22/generated/k8s/v1.18.3/api/core/mod.ts";
-import { v1 as apps } from "https://deno.land/x/deploykit@0.0.22/generated/k8s/v1.18.3/api/apps/mod.ts";
+import { api } from "../../gen/mod.ts";
 
 // Take a constructor (e.g., from the API) and return a transformer
 // that will construct the API resource given a API resource "shape".
@@ -400,8 +399,8 @@ const serviceSpec = {
 // TODO register new transforms (e.g., for custom resources).
 
 export default {
-  namespace: makeResource(core.createNamespace, objectMeta),
-  pod: makeResource(core.createPod, podSpec),
-  deployment: makeResource(apps.createDeployment, deploymentSpec),
-  service: makeResource(core.createService, serviceSpec),
+  namespace: makeResource(api.core.v1.createNamespace, objectMeta),
+  pod: makeResource(api.core.v1.createPod, podSpec),
+  deployment: makeResource(api.apps.v1.createDeployment, deploymentSpec),
+  service: makeResource(api.core.v1.createService, serviceSpec),
 };

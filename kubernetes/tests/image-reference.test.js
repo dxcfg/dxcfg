@@ -1,5 +1,5 @@
 import { ImageReference } from '../src/image-reference.ts';
-import { assertThrows, assertEquals, assertObjectMatch } from "https://deno.land/std/testing/asserts.ts";
+import { assertThrows, assertEquals, assertObjectMatch } from "../../deps.ts";
 
 // from https://github.com/docker/distribution/blob/master/reference/reference_test.go
 [

@@ -9,6 +9,7 @@ export {
 export { ensureFile } from "https:deno.land/std/fs/ensure_file.ts";
 export {
   assertEquals,
+  assertObjectMatch,
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
 
@@ -26,3 +27,6 @@ import set from "https://deno.land/x/lodash@4.17.15-es/set.js";
 export { set as setValue };
 import get from "https://deno.land/x/lodash@4.17.15-es/get.js";
 export { get as getValue };
+export { encode as base64encode } from "https://deno.land/std/encoding/base64.ts";
+import HandlebarsJS from "https://dev.jspm.io/handlebars@4.7.6";
+export { HandlebarsJS };

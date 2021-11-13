@@ -1,6 +1,5 @@
 import { ascii2bytes } from '../src/ascii2bytes.js';
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import { encode as base64encode } from "https://deno.land/std/encoding/base64.ts"
+import { assertEquals, base64encode } from "../../deps.ts";
 
 Deno.test('ascii2bytes', () => {
   assertEquals(ascii2bytes('ABC'), [65, 66, 67])

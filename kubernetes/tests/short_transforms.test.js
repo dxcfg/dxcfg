@@ -1,5 +1,5 @@
 import { relocate, valueMap, transform, thread, mapper, drop } from '../src/short/transform.js';
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "../../deps.ts";
 
 
 [

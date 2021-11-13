@@ -1,10 +1,9 @@
 import { iterateContainers } from '../src/resources.js';
-import { v1 as batch, v1beta1 as batchv1beta1 } from "https://deno.land/x/deploykit@0.0.22/generated/k8s/v1.18.3/api/batch/mod.ts";
-import { v1 as apps } from "https://deno.land/x/deploykit@0.0.22/generated/k8s/v1.18.3/api/apps/mod.ts";
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { api } from "../gen/mod.ts";
+import { assertEquals } from "../../deps.ts";
 
 Deno.test('find all containers in a Deployment', () => {
-  const dep = new apps.createDeployment({
+  const dep = new api.apps.v1.createDeployment({
     metadata: {
       name: 'foo',
       namespace: 'foons',
@@ -30,7 +29,7 @@ Deno.test('find all containers in a Deployment', () => {
 });
 
 Deno.test('find all containers in a Job', () => {
-  const dep = new batch.createJob({
+  const dep = new api.batch.v1.createJob({
     metadata: {
       name: 'job',
       namespace: 'foons',
@@ -56,7 +55,7 @@ Deno.test('find all containers in a Job', () => {
 });
 
 Deno.test('find all containers in a CronJob', () => {
-  const job = new batchv1beta1.createCronJob({
+  const job = new api.batch.v1beta1.createCronJob({
     metadata: {
       name: 'foo',
       namespace: 'foons',

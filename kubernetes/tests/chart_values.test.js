@@ -1,5 +1,5 @@
 import { values } from '../src/chart/values.js';
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "../../deps.ts";
 
 function params(obj = {}) {
   return { Object: (k, d) => (obj.hasOwnProperty(k)) ? obj[k] : d };
