@@ -93,6 +93,7 @@ export function write(
 }
 
 export function writeSync(
+  // deno-lint-ignore no-explicit-any
   value: any,
   path = "",
   opts: WriteOptions = {},
