@@ -1,14 +1,14 @@
 import { generateConfigMap, generateSecret } from '../src/overlay/generators.js';
-import { v1 as core } from "https://deno.land/x/deploykit@0.0.22/generated/k8s/v1.18.3/api/core/mod.ts";
 import { fs } from './mock.js';
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { api } from "../gen/mod.ts";
+import { assertEquals } from "../../deps.ts";
 
 Deno.test('empty configmap', () => {
   const gen = generateConfigMap((f, { encoding }) => {
     throw new Error('unexpected read of ${f}');
   });
   return gen({ name: 'foo-conf' }).then((v) => {
-    assertEquals(v, new core.createConfigMap({ metadata: { name: 'foo-conf' }, data: {} }));
+    assertEquals(v, new api.core.v1.createConfigMap({ metadata: { name: 'foo-conf' }, data: {} }));
   })
 });
 
@@ -24,7 +24,7 @@ Deno.test('files and literals', () => {
     literals: ['some.property=some.value'],
   };
   return gen(conf).then((v) => {
-    assertEquals(v, new core.createConfigMap({
+    assertEquals(v, new api.core.v1.createConfigMap({
       metadata: { name: 'foo-conf' },
       data: {
         'foo.yaml': 'foo: bar',
@@ -50,7 +50,7 @@ Deno.test('secret from literal', () => {
   };
 
   return gen(conf).then((v) => {
-    assertEquals(v, new core.createSecret({
+    assertEquals(v, new api.core.v1.createSecret({
       metadata: { name: 'foo-secret' },
       data: {
         'foo.bin': foobarEncoded,

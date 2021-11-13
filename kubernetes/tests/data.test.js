@@ -1,5 +1,5 @@
 import { dataFromFiles, dataFromDir } from '../src/overlay/data.js';
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "../../deps.ts";
 
 const foo = `---
 conf:

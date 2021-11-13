@@ -1,9 +1,7 @@
 import { dataFromFiles } from './data.js';
-import { basename } from 'https://deno.land/std/path/mod.ts';
-import { encode as base64encode } from "https://deno.land/std/encoding/base64.ts"
+import { basename, base64encode } from '../../../deps.ts';
 import { ascii2bytes } from '../ascii2bytes.js';
-import { v1 as core } from "https://deno.land/x/deploykit@0.0.22/generated/k8s/v1.18.3/api/core/mod.ts";
-
+import { api } from "../../gen/mod.ts";
 const generateConfigMap = readStr => function generate(config) {
   const {
     name,
@@ -21,7 +19,7 @@ const generateConfigMap = readStr => function generate(config) {
     d.forEach((v, k) => {
       data[basename(k)] = v;
     });
-    return new core.createConfigMap({
+    return new api.core.v1.createConfigMap({
       metadata: {
         name: name,
       },
@@ -70,7 +68,7 @@ const generateSecret = readBytes => function generate(config) {
     d.forEach((v, k) => {
       data[basename(k)] = base64encode(v);
     });
-    return new core.createSecret({
+    return new api.core.v1.createSecret({
       metadata: {
         name: name,
       },

@@ -1,6 +1,5 @@
 import { loadDir } from "../src/chart/template.js";
-import HandlebarsJS from "https://dev.jspm.io/handlebars@4.7.6";
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals, HandlebarsJS } from "../../deps.ts";
 // deno-lint-ignore no-explicit-any
 const compile = (HandlebarsJS as any).compile;
 
