@@ -1,5 +1,5 @@
 import { Format } from "./write.ts";
-import { tomlParse, yamlParse } from "./deps.ts";
+import { readJsonLines, tomlParse, yamlParse, yamlParseAll } from "./deps.ts";
 
 export enum Encoding {
   Bytes = 0,
@@ -12,19 +12,55 @@ export interface ReadOptions {
   format?: Format;
 }
 
-export function valuesFormatFromPath(path: string): Format {
+function valuesFormatFromPath(path: string): Format {
   const ext = path.split(".").pop();
   switch (ext) {
     case "yaml":
     case "yml":
-      return Format.YAML;
+      return Format.MULTI_YAML;
     case "json":
-      return Format.JSON;
+      return Format.MULTI_JSON;
     case "toml":
       return Format.TOML;
     default:
       return Format.RAW;
   }
+}
+
+function parseText(text: string, encoding: Encoding, readFormat: Format): any {
+  switch (encoding) {
+    case Encoding.String:
+      return text;
+    case Encoding.Bytes:
+      return new TextEncoder().encode(text);
+    case Encoding.JSON:
+      switch (readFormat) {
+        case Format.MULTI_JSON: {
+          const arr = readJsonLines(text);
+          if (arr.length <= 1) {
+            return JSON.parse(text);
+          }
+          return arr;
+        }
+        case Format.MULTI_YAML:
+          if (!text.includes("---\n")) {
+            return yamlParse(text);
+          }
+          return yamlParseAll(text);
+        case Format.TOML:
+          return tomlParse(text);
+        case Format.RAW:
+          return text;
+
+        default:
+          throw new Error(`unknown format: ${readFormat}`);
+      }
+    default:
+      new Error(`unknown encoding: ${encoding}`);
+      break;
+  }
+
+  return text;
 }
 
 export async function read(path = "", opts: ReadOptions = {}): Promise<any> {
@@ -34,68 +70,15 @@ export async function read(path = "", opts: ReadOptions = {}): Promise<any> {
     readFormat = valuesFormatFromPath(path);
   }
   const text = await Deno.readTextFile(path);
-  const promise = new Promise<any>((resolve, reject) => {
-    switch (encoding) {
-      case Encoding.String:
-        resolve(text);
-        break;
-      case Encoding.Bytes:
-        resolve(new TextEncoder().encode(text));
-        break;
-      case Encoding.JSON:
-        switch (readFormat) {
-          case Format.JSON:
-            resolve(JSON.parse(text));
-            break;
-          case Format.YAML:
-            resolve(yamlParse(text) as any);
-            break;
-          case Format.TOML:
-            resolve(tomlParse(text) as any);
-            break;
-          case Format.RAW:
-            resolve(text);
-            break;
-          default:
-            reject(new Error(`unknown format: ${format}`));
-            break;
-        }
-        break;
-      default:
-        reject(new Error(`unknown encoding: ${encoding}`));
-        break;
-    }
-  });
-
-  return promise;
+  return parseText(text, encoding, readFormat);
 }
 
-export function readSync(path = "", opts: ReadOptions = {}): unknown {
+export function readSync(path = "", opts: ReadOptions = {}): Promise<any> {
   const { encoding = Encoding.JSON, format = Format.FromExtension } = opts;
   let readFormat = format;
   if (readFormat === Format.FromExtension && path) {
     readFormat = valuesFormatFromPath(path);
   }
   const text = Deno.readTextFileSync(path);
-  switch (encoding) {
-    case Encoding.String:
-      return text;
-    case Encoding.Bytes:
-      return new TextEncoder().encode(text);
-    case Encoding.JSON:
-      switch (readFormat) {
-        case Format.JSON:
-          return JSON.parse(text);
-        case Format.YAML:
-          return yamlParse(text);
-        case Format.TOML:
-          return tomlParse(text);
-        case Format.RAW:
-          return text;
-        default:
-          throw new Error(`unknown format: ${format}`);
-      }
-    default:
-      throw new Error(`unknown encoding: ${encoding}`);
-  }
+  return parseText(text, encoding, readFormat);
 }

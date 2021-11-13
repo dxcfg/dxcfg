@@ -1,5 +1,4 @@
 import { tomlStringify, yamlStringify } from "./deps.ts";
-import { valuesFormatFromPath } from "./read.ts";
 
 export enum Format {
   FromExtension,
@@ -7,6 +6,8 @@ export enum Format {
   YAML,
   TOML,
   RAW,
+  MULTI_JSON, // multiple json documents delimited by \n
+  MULTI_YAML, // multiple yaml documents delimited by ---\n
 }
 
 export interface WriteOptions {
@@ -14,15 +15,29 @@ export interface WriteOptions {
   indent?: number;
 }
 
-export function write(
+function valuesFormatFromPath(path: string): Format {
+  const ext = path.split(".").pop();
+  switch (ext) {
+    case "yaml":
+    case "yml":
+      return Format.YAML;
+    case "json":
+      return Format.JSON;
+    case "toml":
+      return Format.TOML;
+    default:
+      return Format.RAW;
+  }
+}
+
+export function formatText(
   value: any,
   path = "",
   opts: WriteOptions = {},
-): Promise<void> {
+): string {
   if (value === undefined) {
     throw TypeError("cannot write undefined value");
   }
-
   const {
     format = Format.FromExtension,
     indent = 2,
@@ -34,18 +49,41 @@ export function write(
   }
 
   switch (writeFormat) {
+    case Format.MULTI_YAML:
+      if (!Array.isArray(value)) {
+        throw new Error("expected array for Format.MULTI_YAML");
+      }
+      return value.map((v) => yamlStringify(v, { indent: indent })).join(
+        "---\n",
+      );
+
     case Format.YAML:
-      return Deno.writeTextFile(path, yamlStringify(value, { indent: indent }));
+      return yamlStringify(value, { indent: indent });
     case Format.TOML:
-      return Deno.writeTextFile(path, tomlStringify(value));
+      return tomlStringify(value);
+    case Format.MULTI_JSON:
+      if (!Array.isArray(value)) {
+        throw new Error("expected array for Format.MULTI_JSON");
+      }
+      return value.map((v) => JSON.stringify(v)).join(
+        "\n",
+      );
     case Format.JSON:
-      return Deno.writeTextFile(path, JSON.stringify(value, null, indent));
+      return JSON.stringify(value, null, indent);
     case Format.RAW:
-      return Deno.writeTextFile(path, value.toString());
+      return value.toString();
     default:
       break;
   }
-  return Deno.writeTextFile(path, value.toString());
+  return value.toString();
+}
+
+export function write(
+  value: any,
+  path = "",
+  opts: WriteOptions = {},
+): Promise<void> {
+  return Deno.writeTextFile(path, formatText(value, path, opts));
 }
 
 export function writeSync(
@@ -53,34 +91,5 @@ export function writeSync(
   path = "",
   opts: WriteOptions = {},
 ): void {
-  if (value === undefined) {
-    throw TypeError("cannot write undefined value");
-  }
-
-  const {
-    format = Format.FromExtension,
-    indent = 2,
-  } = opts;
-
-  let writeFormat = format;
-  if (writeFormat === Format.FromExtension && path) {
-    writeFormat = valuesFormatFromPath(path);
-  }
-
-  switch (writeFormat) {
-    case Format.YAML:
-      return Deno.writeTextFileSync(
-        path,
-        yamlStringify(value, { indent: indent }),
-      );
-    case Format.TOML:
-      return Deno.writeTextFileSync(path, tomlStringify(value));
-    case Format.JSON:
-      return Deno.writeTextFileSync(path, JSON.stringify(value, null, indent));
-    case Format.RAW:
-      return Deno.writeTextFileSync(path, value.toString());
-    default:
-      break;
-  }
-  return Deno.writeTextFileSync(path, value.toString());
+  Deno.writeTextFileSync(path, formatText(value, path, opts));
 }
