@@ -69,3 +69,33 @@ export async function read(path = "", opts: ReadOptions = {}): Promise<any> {
 
   return promise;
 }
+
+export function readSync(path = "", opts: ReadOptions = {}): unknown {
+  const { encoding = Encoding.JSON, format = Format.FromExtension } = opts;
+  let readFormat = format;
+  if (readFormat === Format.FromExtension && path) {
+    readFormat = valuesFormatFromPath(path);
+  }
+  const text = Deno.readTextFileSync(path);
+  switch (encoding) {
+    case Encoding.String:
+      return text;
+    case Encoding.Bytes:
+      return new TextEncoder().encode(text);
+    case Encoding.JSON:
+      switch (readFormat) {
+        case Format.JSON:
+          return JSON.parse(text);
+        case Format.YAML:
+          return yamlParse(text);
+        case Format.TOML:
+          return tomlParse(text);
+        case Format.RAW:
+          return text;
+        default:
+          throw new Error(`unknown format: ${format}`);
+      }
+    default:
+      throw new Error(`unknown encoding: ${encoding}`);
+  }
+}

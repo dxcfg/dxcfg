@@ -47,3 +47,40 @@ export function write(
   }
   return Deno.writeTextFile(path, value.toString());
 }
+
+export function writeSync(
+  value: any,
+  path = "",
+  opts: WriteOptions = {},
+): void {
+  if (value === undefined) {
+    throw TypeError("cannot write undefined value");
+  }
+
+  const {
+    format = Format.FromExtension,
+    indent = 2,
+  } = opts;
+
+  let writeFormat = format;
+  if (writeFormat === Format.FromExtension && path) {
+    writeFormat = valuesFormatFromPath(path);
+  }
+
+  switch (writeFormat) {
+    case Format.YAML:
+      return Deno.writeTextFileSync(
+        path,
+        yamlStringify(value, { indent: indent }),
+      );
+    case Format.TOML:
+      return Deno.writeTextFileSync(path, tomlStringify(value));
+    case Format.JSON:
+      return Deno.writeTextFileSync(path, JSON.stringify(value, null, indent));
+    case Format.RAW:
+      return Deno.writeTextFileSync(path, value.toString());
+    default:
+      break;
+  }
+  return Deno.writeTextFileSync(path, value.toString());
+}
