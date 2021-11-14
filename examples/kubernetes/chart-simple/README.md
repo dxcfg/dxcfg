@@ -1,4 +1,4 @@
-# Generate a multi resource yaml file
+# Generate a multi resource yaml file using template literals
 
 Here we use
 [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
