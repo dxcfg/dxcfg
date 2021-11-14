@@ -1,4 +1,9 @@
-import { tomlStringify, yamlStringify } from "./deps.ts";
+import {
+  ensureFile,
+  ensureFileSync,
+  tomlStringify,
+  yamlStringify,
+} from "./deps.ts";
 
 export enum Format {
   FromExtension,
@@ -16,6 +21,9 @@ export interface WriteOptions {
 }
 
 function valuesFormatFromPath(path: string): Format {
+  if (!path) {
+    return Format.RAW;
+  }
   const ext = path.split(".").pop();
   switch (ext) {
     case "yaml":
@@ -47,12 +55,14 @@ export function stringify(
       if (!Array.isArray(value)) {
         throw new Error("expected array for Format.MULTI_YAML");
       }
-      return value.map((v) => yamlStringify(v, { indent: indent })).join(
+      return value.map((v) =>
+        yamlStringify(v, { indent: indent, skipInvalid: true })
+      ).join(
         "---\n",
       );
 
     case Format.YAML:
-      return yamlStringify(value, { indent: indent });
+      return yamlStringify(value, { indent: indent, skipInvalid: true });
     case Format.TOML:
       return tomlStringify(value);
     case Format.MULTI_JSON:
@@ -72,11 +82,15 @@ export function stringify(
   return value.toString();
 }
 
-export function write(
+export async function write(
   value: any,
   path = "",
   opts: WriteOptions = {},
 ): Promise<void> {
+  if (!value) {
+    throw new Error("value is undefined");
+  }
+
   const {
     format = Format.FromExtension,
     indent = 2,
@@ -86,6 +100,7 @@ export function write(
   if (writeFormat === Format.FromExtension && path) {
     writeFormat = valuesFormatFromPath(path);
   }
+  await ensureFile(path);
   return Deno.writeTextFile(
     path,
     stringify(value, { format: writeFormat, indent: indent }),
@@ -97,6 +112,10 @@ export function writeSync(
   path = "",
   opts: WriteOptions = {},
 ): void {
+  if (!value) {
+    throw new Error("value is undefined");
+  }
+
   const {
     format = Format.FromExtension,
     indent = 2,
@@ -106,6 +125,8 @@ export function writeSync(
   if (writeFormat === Format.FromExtension && path) {
     writeFormat = valuesFormatFromPath(path);
   }
+
+  ensureFileSync(path);
   Deno.writeTextFileSync(
     path,
     stringify(value, { format: writeFormat, indent: indent }),

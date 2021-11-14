@@ -7,7 +7,6 @@ export {
   parse as tomlParse,
   stringify as tomlStringify,
 } from "https://deno.land/std/encoding/toml.ts";
-export { ensureFile } from "https:deno.land/std/fs/ensure_file.ts";
 export {
   assertEquals,
   assertObjectMatch,
@@ -34,3 +33,4 @@ import HandlebarsJS from "https://dev.jspm.io/handlebars@4.7.6";
 export { HandlebarsJS };
 import readJsonLines from "https://cdn.skypack.dev/read-json-lines-sync?dts";
 export { readJsonLines };
+export { ensureFile, ensureFileSync } from "https://deno.land/std/fs/mod.ts";
