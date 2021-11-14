@@ -1,12 +1,17 @@
-import * as api from '@jkcfg/kubernetes/api';
+import { api } from '../../deps.ts';
 
 function Namespace(service) {
-  return new api.core.v1.Namespace(service.namespace);
+  return new api.core.v1.createNamespace({
+    metadata: {
+      name: service.namespace
+    }
+  });
 }
 
 function Deployment(service) {
-  return new api.apps.v1.Deployment(service.name, {
+  return new api.apps.v1.createDeployment({
     metadata: {
+      name: service.name,
       namespace: service.namespace,
       labels: {
         app: service.name,
@@ -49,8 +54,9 @@ function Deployment(service) {
 }
 
 function Service(service) {
-  return new api.core.v1.Service(service.name, {
+  return new api.core.v1.createService({
     metadata: {
+      name: service.name,
       namespace: service.namespace,
       labels: {
         app: service.name,
@@ -69,8 +75,9 @@ function Service(service) {
 }
 
 function Ingress(service) {
-  return new api.extensions.v1beta1.Ingress(service.name, {
+  return new api.networking.v1.createIngress({
     metadata: {
+      name: service.name,
       namespace: service.namespace,
       labels: {
         app: service.name,
@@ -97,8 +104,9 @@ function Ingress(service) {
 }
 
 function ConfigMap(service, name, data) {
-  return new api.core.v1.ConfigMap(name, {
+  return new api.core.v1.createConfigMap({
     metadata: {
+      name: name,
       namespace: service.namespace,
       labels: {
         app: service.name,

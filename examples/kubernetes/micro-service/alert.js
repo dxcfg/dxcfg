@@ -1,4 +1,4 @@
-import * as prometheus from './prometheus';
+import * as prometheus from './prometheus.js';
 
 const r = '2m';
 const selector = service => `job=${service.name}`;
