@@ -22,7 +22,8 @@ addFormats(ajv);
 export { ajv };
 
 export { parse as flagsParse } from "https://deno.land/std/flags/mod.ts";
-export { basename } from "https://deno.land/std/path/mod.ts";
+import * as path from "https://deno.land/std/path/mod.ts";
+export { path };
 
 import set from "https://deno.land/x/lodash@4.17.15-es/set.js";
 export { set as setValue };

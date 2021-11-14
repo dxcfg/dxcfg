@@ -1,4 +1,4 @@
-import { basename } from "./deps.ts";
+import { path } from "./deps.ts";
 export class FileInfo {
   name: string;
   path: string;
@@ -23,19 +23,19 @@ export class Directory {
   }
 }
 
-export function info(path: string): FileInfo {
-  const fi = Deno.statSync(path);
-  return new FileInfo(basename(path), path, fi.isDirectory);
+export function info(filePath: string): FileInfo {
+  const fi = Deno.statSync(filePath);
+  return new FileInfo(path.basename(filePath), filePath, fi.isDirectory);
 }
 
-export function dir(path: string): Directory {
+export function dir(dirPath: string): Directory {
   const entries: Deno.DirEntry[] = [];
-  for (const dirEntry of Deno.readDirSync(path)) {
+  for (const dirEntry of Deno.readDirSync(dirPath)) {
     entries.push(dirEntry);
   }
   const infos = [];
   for (const e of entries) {
-    infos.push(new FileInfo(e.name, e.name, e.isDirectory));
+    infos.push(new FileInfo(e.name, path.join(dirPath, e.name), e.isDirectory));
   }
-  return new Directory(basename(path), path, infos);
+  return new Directory(path.basename(dirPath), dirPath, infos);
 }
