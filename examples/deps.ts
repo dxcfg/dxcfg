@@ -1,6 +1,6 @@
-export * from "https://deno.land/x/dxcfg@v0.0.7/mod.ts";
-export * from "https://deno.land/x/dxcfg@v0.0.7/kubernetes/mod.ts";
-export * from "https://deno.land/x/dxcfg@v0.0.7/kubernetes/gen/mod.ts";
+export * from "https://deno.land/x/dxcfg@v0.0.9/mod.ts";
+export * from "https://deno.land/x/dxcfg@v0.0.9/kubernetes/mod.ts";
+export * from "https://deno.land/x/dxcfg@v0.0.9/kubernetes/gen/mod.ts";
 export {
   assertEquals,
   assertObjectMatch,
