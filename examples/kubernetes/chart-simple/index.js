@@ -1,6 +1,37 @@
-import { generateChart, param, write } from '../../deps.ts';
+import { param, write, Format } from '../../deps.ts';
+import { api } from '../../deps.ts';
 
-import resources from './resources.js';
+function resources(Values) {
+  return [
+    new api.apps.v1.createDeployment({
+      metadata: {
+        name: `${Values.name}-dep`,
+      },
+      spec: {
+        template: {
+          labels: { app: Values.app },
+          spec: {
+            containers: {
+              hello: {
+                image: `${Values.image.repository}:${Values.image.tag}`,
+              },
+            },
+          },
+        },
+      },
+    }),
+    new api.core.v1.createService({
+      metadata: {
+        name: `${Values.name}-svc`,
+        labels: { app: Values.app },
+      },
+      spec: {
+        selector: {
+          app: Values.app,
+        },
+      },
+    })];
+}
 
 const defaults = {
   name: 'helloworld',
@@ -11,5 +42,5 @@ const defaults = {
   },
 };
 
-const chart = await generateChart(resources, defaults, param);
-await write(chart, 'chart.yaml')
+const values = await param.object("values", defaults)
+await write(resources(values), 'chart.yaml', { format: Format.MULTI_YAML })
