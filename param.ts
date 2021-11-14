@@ -102,6 +102,7 @@ export class param {
     defaultValue?: number,
     args?: string[],
   ): Promise<number> {
+    // deno-lint-ignore no-explicit-any
     let defaultValueStr: any;
     if (defaultValue) {
       defaultValueStr = String(defaultValue);
@@ -118,6 +119,7 @@ export class param {
     defaultValue?: boolean,
     args?: string[],
   ): Promise<boolean> {
+    // deno-lint-ignore no-explicit-any
     let defaultValueStr: any;
     if (defaultValue) {
       defaultValueStr = String(defaultValue);
@@ -179,6 +181,7 @@ export class paramSync {
     defaultValue?: number,
     args?: string[],
   ): number {
+    // deno-lint-ignore no-explicit-any
     let defaultValueStr: any;
     if (defaultValue) {
       defaultValueStr = String(defaultValue);
@@ -191,6 +194,7 @@ export class paramSync {
     defaultValue?: boolean,
     args?: string[],
   ): boolean {
+    // deno-lint-ignore no-explicit-any
     let defaultValueStr: any;
     if (defaultValue) {
       defaultValueStr = String(defaultValue);

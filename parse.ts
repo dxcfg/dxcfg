@@ -1,6 +1,7 @@
 import { Format } from "./write.ts";
 import { tomlParse, tomlStringify, yamlParse, yamlStringify } from "./deps.ts";
 
+// deno-lint-ignore no-explicit-any
 export function parse(input: string, format?: Format): any {
   switch (format) {
     case Format.JSON:
@@ -14,6 +15,7 @@ export function parse(input: string, format?: Format): any {
   }
 }
 
+// deno-lint-ignore no-explicit-any
 export function stringify(obj: any, format?: Format): any {
   switch (format) {
     case Format.JSON:

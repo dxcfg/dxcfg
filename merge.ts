@@ -1,4 +1,6 @@
+// deno-lint-ignore-file
 // typescript port of https://github.com/jkcfg/jk/blob/master/std/merge.js
+//
 function mergeFunc(rule: any, key: any, defaultFunc: Function) {
   const f = rule && rule[key];
   if (f === undefined) {
@@ -337,6 +339,7 @@ export function deepWithKey(mergeKey: string, rules?: any) {
  * }
  * ```
  */
+// deno-lint-ignore no-explicit-any
 export function merge(a: any, b: any, rule?: any): any {
   const [typeA, typeB] = [typeof a, typeof b];
 
