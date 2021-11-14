@@ -1,5 +1,5 @@
 import { dataFromFiles } from './data.js';
-import { basename, base64encode } from '../../../deps.ts';
+import { path, base64encode } from '../../../deps.ts';
 import { ascii2bytes } from '../ascii2bytes.js';
 import { api } from "../../gen/mod.ts";
 const generateConfigMap = readStr => function generate(config) {
@@ -17,7 +17,7 @@ const generateConfigMap = readStr => function generate(config) {
   const fileContents = dataFromFiles(readStr, files);
   return fileContents.then((d) => {
     d.forEach((v, k) => {
-      data[basename(k)] = v;
+      data[path.basename(k)] = v;
     });
     return new api.core.v1.createConfigMap({
       metadata: {
@@ -66,7 +66,7 @@ const generateSecret = readBytes => function generate(config) {
   const fileContents = dataFromFiles(readBytes, files);
   return fileContents.then((d) => {
     d.forEach((v, k) => {
-      data[basename(k)] = base64encode(v);
+      data[path.basename(k)] = base64encode(v);
     });
     return new api.core.v1.createSecret({
       metadata: {

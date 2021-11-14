@@ -27,14 +27,17 @@ function valuesFormatFromPath(path: string): Format {
   }
 }
 
-function parseText(text: string, encoding: Encoding, readFormat: Format): any {
+export function parse(text: string, opts: ReadOptions = {}): any {
+  const { encoding = Encoding.JSON, format = Format.MULTI_JSON } = opts;
   switch (encoding) {
     case Encoding.String:
       return text;
     case Encoding.Bytes:
       return new TextEncoder().encode(text);
     case Encoding.JSON:
-      switch (readFormat) {
+      switch (format) {
+        case Format.JSON:
+          return JSON.parse(text);
         case Format.MULTI_JSON: {
           const arr = readJsonLines(text);
           if (arr.length <= 1) {
@@ -42,6 +45,8 @@ function parseText(text: string, encoding: Encoding, readFormat: Format): any {
           }
           return arr;
         }
+        case Format.YAML:
+          return yamlParse(text);
         case Format.MULTI_YAML:
           if (!text.includes("---\n")) {
             return yamlParse(text);
@@ -53,7 +58,7 @@ function parseText(text: string, encoding: Encoding, readFormat: Format): any {
           return text;
 
         default:
-          throw new Error(`unknown format: ${readFormat}`);
+          throw new Error(`unknown format: ${format}`);
       }
     default:
       new Error(`unknown encoding: ${encoding}`);
@@ -70,7 +75,7 @@ export async function read(path = "", opts: ReadOptions = {}): Promise<any> {
     readFormat = valuesFormatFromPath(path);
   }
   const text = await Deno.readTextFile(path);
-  return parseText(text, encoding, readFormat);
+  return parse(text, { encoding: encoding, format: readFormat });
 }
 
 export function readSync(path = "", opts: ReadOptions = {}): Promise<any> {
@@ -80,5 +85,5 @@ export function readSync(path = "", opts: ReadOptions = {}): Promise<any> {
     readFormat = valuesFormatFromPath(path);
   }
   const text = Deno.readTextFileSync(path);
-  return parseText(text, encoding, readFormat);
+  return parse(text, { encoding: encoding, format: readFormat });
 }

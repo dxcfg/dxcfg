@@ -1,6 +1,6 @@
 import { assertEquals } from "./deps.ts";
-import { Format, write } from "./write.ts";
-import { read, readSync } from "./read.ts";
+import { Format, stringify, write } from "./write.ts";
+import { parse, read, readSync } from "./read.ts";
 
 const expected = {
   name: "Alice",
@@ -20,6 +20,13 @@ const runWriteReadTest = async (tmp: string) => {
   assertEquals(actual, expected);
 };
 
+const runStringifyParseTest = (format: Format) => {
+  const actual = parse(stringify(expected, { format: format }), {
+    format: format,
+  });
+  assertEquals(actual, expected);
+};
+
 Deno.test("write and read json: format from file extension", async () => {
   await runWriteReadTest(Deno.makeTempFileSync({ suffix: ".json" }));
 });
@@ -30,6 +37,18 @@ Deno.test("write and read yaml: format from file extension", async () => {
 
 Deno.test("write and read toml: format from file extension", async () => {
   await runWriteReadTest(Deno.makeTempFileSync({ suffix: ".toml" }));
+});
+
+Deno.test("stringify and read json", () => {
+  runStringifyParseTest(Format.JSON);
+});
+
+Deno.test("stringify and read yaml", () => {
+  runStringifyParseTest(Format.YAML);
+});
+
+Deno.test("stringify and read yaml", () => {
+  runStringifyParseTest(Format.TOML);
 });
 
 Deno.test("read multi json", () => {
@@ -59,6 +78,16 @@ Deno.test("read and write multi json", async () => {
   assertEquals(actual, multiJson);
 });
 
+Deno.test("stringify and parse multi json", () => {
+  const multiJson = [{
+    a: "b",
+  }, {
+    x: "y",
+  }];
+  const actual = parse(stringify(multiJson));
+  assertEquals(actual, multiJson);
+});
+
 Deno.test("read multi yaml", () => {
   const multiYamlStr = `
 ---
@@ -79,6 +108,23 @@ name: Eve
   const tmp = Deno.makeTempFileSync({ suffix: ".yaml" });
   Deno.writeTextFileSync(tmp, multiYamlStr);
   const actual = readSync(tmp);
+  assertEquals(actual, multiYaml);
+});
+
+Deno.test("stringify and parse multi yaml", () => {
+  const multiYaml = [{
+    id: 1,
+    name: "Alice",
+  }, {
+    id: 2,
+    name: "Bob",
+  }, {
+    id: 3,
+    name: "Eve",
+  }];
+  const actual = parse(stringify(multiYaml, { format: Format.MULTI_YAML }), {
+    format: Format.MULTI_YAML,
+  });
   assertEquals(actual, multiYaml);
 });
 

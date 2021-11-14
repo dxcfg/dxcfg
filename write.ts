@@ -30,25 +30,19 @@ function valuesFormatFromPath(path: string): Format {
   }
 }
 
-export function formatText(
+export function stringify(
   value: any,
-  path = "",
   opts: WriteOptions = {},
 ): string {
   if (value === undefined) {
     throw TypeError("cannot write undefined value");
   }
   const {
-    format = Format.FromExtension,
+    format = Format.MULTI_JSON,
     indent = 2,
   } = opts;
 
-  let writeFormat = format;
-  if (writeFormat === Format.FromExtension && path) {
-    writeFormat = valuesFormatFromPath(path);
-  }
-
-  switch (writeFormat) {
+  switch (format) {
     case Format.MULTI_YAML:
       if (!Array.isArray(value)) {
         throw new Error("expected array for Format.MULTI_YAML");
@@ -83,7 +77,19 @@ export function write(
   path = "",
   opts: WriteOptions = {},
 ): Promise<void> {
-  return Deno.writeTextFile(path, formatText(value, path, opts));
+  const {
+    format = Format.FromExtension,
+    indent = 2,
+  } = opts;
+
+  let writeFormat = format;
+  if (writeFormat === Format.FromExtension && path) {
+    writeFormat = valuesFormatFromPath(path);
+  }
+  return Deno.writeTextFile(
+    path,
+    stringify(value, { format: writeFormat, indent: indent }),
+  );
 }
 
 export function writeSync(
@@ -91,5 +97,17 @@ export function writeSync(
   path = "",
   opts: WriteOptions = {},
 ): void {
-  Deno.writeTextFileSync(path, formatText(value, path, opts));
+  const {
+    format = Format.FromExtension,
+    indent = 2,
+  } = opts;
+
+  let writeFormat = format;
+  if (writeFormat === Format.FromExtension && path) {
+    writeFormat = valuesFormatFromPath(path);
+  }
+  Deno.writeTextFileSync(
+    path,
+    stringify(value, { format: writeFormat, indent: indent }),
+  );
 }
