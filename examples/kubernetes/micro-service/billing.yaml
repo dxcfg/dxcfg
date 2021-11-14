@@ -3,6 +3,7 @@ service:
   description: Provides the /api/billing endpoints for frontend.
   maintainer: damien@weave.works
   namespace: billing
+  replicas: 2
   port: 80
   image: quay.io/acmecorp/billing:master-fd986f62
   ingress:

@@ -1,4 +1,0 @@
-service:
-  name: hello-svc
-  selector:
-    app: hello

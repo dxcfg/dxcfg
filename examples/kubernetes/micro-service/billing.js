@@ -1,5 +1,3 @@
-import { MicroService } from './micro-service';
-
 const billing = {
   name: 'billing',
   description: 'Provides the /api/billing endpoints for frontend.',
@@ -18,4 +16,4 @@ const billing = {
   ],
 };
 
-export default MicroService(billing);
+export default billing;
