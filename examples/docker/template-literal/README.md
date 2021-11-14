@@ -1,7 +1,7 @@
 An example to generate a dockerfile
 
 ```bash
-deno run --allow-write --allow-read dockerfile.js
+deno run --unstable --allow-write --allow-read dockerfile.js
 ```
 
 creates a `Dockerfile`

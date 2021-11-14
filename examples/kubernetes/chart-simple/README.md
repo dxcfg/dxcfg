@@ -5,7 +5,7 @@ Here we use
 to generate a multi-resource yaml file.
 
 ```bash
-deno run --allow-read --allow-write index.js
+deno run --unstable --allow-read --allow-write index.js
 ```
 
 creates a multi-resource yaml: `chart.yaml`
@@ -38,7 +38,7 @@ spec:
 One can pass `values.<val>` from the command line to override the defaults:
 
 ```bash
-deno run --allow-read --allow-write index.js -p values.name=demo -p values.image.tag=v2
+deno run --unstable --allow-read --allow-write index.js -p values.name=demo -p values.image.tag=v2
 ```
 
 creates a multi-resource yaml: `chart.yaml`

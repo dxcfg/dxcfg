@@ -1,6 +1,5 @@
-export * from "../mod.ts";
-export * from "https://deno.land/x/dxcfg@v0.0.9/kubernetes/mod.ts";
-export * from "https://deno.land/x/dxcfg@v0.0.9/kubernetes/gen/mod.ts";
+export * from "https://deno.land/x/dxcfg@v0.0.10/mod.ts";
+export * from "https://deno.land/x/dxcfg@v0.0.10/kubernetes/mod.ts";
 export {
   assertEquals,
   assertObjectMatch,
@@ -9,4 +8,3 @@ export {
 
 import HandlebarsJS from "https://dev.jspm.io/handlebars@4.7.6";
 export { HandlebarsJS };
-export { dir } from "../fs.ts";

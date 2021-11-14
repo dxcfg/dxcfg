@@ -1,7 +1,7 @@
 A simple example to generate a yaml file
 
 ```bash
-deno run --allow-write alice.js
+deno run --unstable --allow-write --allow-read alice.js
 ```
 
 creates a `alice.yaml` file

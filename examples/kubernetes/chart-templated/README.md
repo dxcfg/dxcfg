@@ -4,7 +4,7 @@ Here we use [handlebarsjs](https://handlebarsjs.com/) to generate a
 multi-resource yaml file.
 
 ```bash
-deno run --allow-read --allow-write index.js -f default.yaml
+deno run --unstable --allow-read --allow-write index.js -f defaults.yaml
 ```
 
 creates a multi-resource yaml: `chart.yaml`

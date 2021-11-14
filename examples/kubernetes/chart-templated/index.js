@@ -1,4 +1,4 @@
-import { param, read, write, parse, Format, dir } from '../../deps.ts';
+import { param, write, parse, Format, dir } from '../../deps.ts';
 import { HandlebarsJS } from "../../deps.ts";
 const compile = (HandlebarsJS).compile;
 
