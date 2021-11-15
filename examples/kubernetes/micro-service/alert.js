@@ -1,21 +1,23 @@
-import * as prometheus from './prometheus.js';
+import * as prometheus from "./prometheus.js";
 
-const r = '2m';
-const selector = service => `job=${service.name}`;
-const ErrorRate = selector => `rate(http_request_total{${selector},code=~"5.."}[${r}])
+const r = "2m";
+const selector = (service) => `job=${service.name}`;
+const ErrorRate = (selector) =>
+  `rate(http_request_total{${selector},code=~"5.."}[${r}])
     / rate(http_request_duration_seconds_count{${selector}}[${r}])`;
 
 function RPSHTTPHighErrorRate(service) {
   return {
-    alert: 'HighErrorRate',
+    alert: "HighErrorRate",
     expr: `${ErrorRate(selector(service))} * 100 > 10`,
-    for: '5m',
+    for: "5m",
     labels: {
-      severity: 'critical',
+      severity: "critical",
     },
     annotations: {
       service: service.name,
-      description: `More than 10% of requests to the ${service.name} service are failing with 5xx errors`,
+      description:
+        `More than 10% of requests to the ${service.name} service are failing with 5xx errors`,
       details: '{{$value | printf "%.1f"}}% errors for more than 5m',
     },
   };
@@ -25,7 +27,7 @@ function RPSHTTPHighErrorRate(service) {
 // imports so we can import dashboards js definitions from string descriptions:
 //   https://developers.google.com/web/updates/2017/11/dynamic-import
 const alerts = {
-  'service.RPS.HTTP.HighErrorRate': RPSHTTPHighErrorRate,
+  "service.RPS.HTTP.HighErrorRate": RPSHTTPHighErrorRate,
 };
 
 function rules(service) {
@@ -33,7 +35,7 @@ function rules(service) {
     return [];
   }
 
-  return service.alerts.map(a => alerts[a](service));
+  return service.alerts.map((a) => alerts[a](service));
 }
 
 function PrometheusRule(service) {
@@ -42,8 +44,8 @@ function PrometheusRule(service) {
       labels: {
         app: service.name,
         maintainer: service.maintainer,
-        prometheus: 'global',
-        role: 'alert-rules',
+        prometheus: "global",
+        role: "alert-rules",
       },
     },
     spec: {
@@ -55,6 +57,4 @@ function PrometheusRule(service) {
   });
 }
 
-export {
-  PrometheusRule,
-};
+export { PrometheusRule };

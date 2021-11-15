@@ -1,5 +1,5 @@
-import { param, write, Format } from '../../deps.ts';
-import { api } from '../../deps.ts';
+import { Format, param, write } from "../../deps.ts";
+import { api } from "../../deps.ts";
 
 function resources(Values) {
   return [
@@ -30,17 +30,18 @@ function resources(Values) {
           app: Values.app,
         },
       },
-    })];
+    }),
+  ];
 }
 
 const defaults = {
-  name: 'helloworld',
-  app: 'hello',
+  name: "helloworld",
+  app: "hello",
   image: {
-    repository: 'weaveworks/helloworld',
-    tag: 'v1',
+    repository: "weaveworks/helloworld",
+    tag: "v1",
   },
 };
 
-const values = await param.object("values", defaults)
-await write(resources(values), 'chart.yaml', { format: Format.MULTI_YAML })
+const values = await param.object("values", defaults);
+await write(resources(values), "chart.yaml", { format: Format.MULTI_YAML });

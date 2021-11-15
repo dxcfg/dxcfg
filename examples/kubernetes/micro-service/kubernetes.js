@@ -1,10 +1,10 @@
-import { api } from '../../deps.ts';
+import { api } from "../../deps.ts";
 
 function Namespace(service) {
   return new api.core.v1.createNamespace({
     metadata: {
-      name: service.namespace
-    }
+      name: service.namespace,
+    },
   });
 }
 
@@ -84,7 +84,7 @@ function Ingress(service) {
         maintainer: service.maintainer,
       },
       annotations: {
-        'nginx.ingress.kubernetes.io/rewrite-target': '/',
+        "nginx.ingress.kubernetes.io/rewrite-target": "/",
       },
     },
     spec: {
@@ -117,10 +117,4 @@ function ConfigMap(service, name, data) {
   });
 }
 
-export {
-  Deployment,
-  Ingress,
-  Namespace,
-  Service,
-  ConfigMap,
-};
+export { ConfigMap, Deployment, Ingress, Namespace, Service };
