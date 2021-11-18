@@ -4,8 +4,10 @@
 [![codecov](https://codecov.io/gh/dxcfg/dxcfg/branch/main/graph/badge.svg?token=KEKZ52NXGP)](https://codecov.io/gh/dxcfg/dxcfg)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/dxcfg/mod.ts)
 
-Configuration as code tooling for the masses. `Opinionated` port of
-[jkcfg](https://jkcfg.github.io/#/) API to deno.
+`dxcfg` allows you to use javascript/typescript to generate configuration.
+
+An `opinionated` port of
+[jkcfg](https://jkcfg.github.io/#/) API to deno and is a `work in progress`.
 
 ## Example Usage
 
