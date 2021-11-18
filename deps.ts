@@ -13,7 +13,6 @@ export {
   assertObjectMatch,
   assertThrows,
 } from "https://deno.land/std/testing/asserts.ts";
-export { ensureFile, ensureFileSync } from "https://deno.land/std/fs/mod.ts";
 export { encode as base64encode } from "https://deno.land/std/encoding/base64.ts";
 export { parse as flagsParse } from "https://deno.land/std/flags/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";

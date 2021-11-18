@@ -1,9 +1,4 @@
-import {
-  ensureFile,
-  ensureFileSync,
-  tomlStringify,
-  yamlStringify,
-} from "./deps.ts";
+import { tomlStringify, yamlStringify } from "./deps.ts";
 
 export enum Format {
   FromExtension,
@@ -103,8 +98,7 @@ export async function write(
   if (writeFormat === Format.FromExtension && path) {
     writeFormat = valuesFormatFromPath(path);
   }
-  await ensureFile(path);
-  return Deno.writeTextFile(
+  await Deno.writeTextFile(
     path,
     stringify(value, { format: writeFormat, indent: indent }),
   );
@@ -129,7 +123,6 @@ export function writeSync(
     writeFormat = valuesFormatFromPath(path);
   }
 
-  ensureFileSync(path);
   Deno.writeTextFileSync(
     path,
     stringify(value, { format: writeFormat, indent: indent }),
