@@ -1,8 +1,8 @@
 import { ajv, ValidateFunction } from "./deps.ts";
 
 export function validateWithObject(
-  obj: any,
-  schema: Record<string, any>,
+  obj: unknown,
+  schema: Record<string, unknown>,
 ): boolean {
   const validate: ValidateFunction = ajv.compile(schema);
   if (!validate(obj)) throw new Error(ajv.errorsText(validate.errors));
@@ -12,7 +12,7 @@ export function validateWithObject(
 }
 
 export function validateWithFile(
-  obj: any,
+  obj: unknown,
   schemaPath: string,
 ): boolean {
   const schema = JSON.parse(Deno.readTextFileSync(schemaPath));

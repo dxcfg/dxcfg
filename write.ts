@@ -39,7 +39,7 @@ function valuesFormatFromPath(path: string): Format {
 }
 
 export function stringify(
-  value: any,
+  value: unknown,
   opts: WriteOptions = {},
 ): string {
   if (value === undefined) {
@@ -62,9 +62,12 @@ export function stringify(
       );
 
     case Format.YAML:
-      return yamlStringify(value, { indent: indent, skipInvalid: true });
+      return yamlStringify(value as Record<string, unknown>, {
+        indent: indent,
+        skipInvalid: true,
+      });
     case Format.TOML:
-      return tomlStringify(value);
+      return tomlStringify(value as Record<string, unknown>);
     case Format.MULTI_JSON:
       if (!Array.isArray(value)) {
         throw new Error("expected array for Format.MULTI_JSON");
@@ -75,15 +78,15 @@ export function stringify(
     case Format.JSON:
       return JSON.stringify(value, null, indent);
     case Format.RAW:
-      return value.toString();
+      return (value as string).toString();
     default:
       break;
   }
-  return value.toString();
+  return (value as string).toString();
 }
 
 export async function write(
-  value: any,
+  value: unknown,
   path = "",
   opts: WriteOptions = {},
 ): Promise<void> {
@@ -108,8 +111,7 @@ export async function write(
 }
 
 export function writeSync(
-  // deno-lint-ignore no-explicit-any
-  value: any,
+  value: unknown,
   path = "",
   opts: WriteOptions = {},
 ): void {

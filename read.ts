@@ -27,7 +27,7 @@ function valuesFormatFromPath(path: string): Format {
   }
 }
 
-export function parse(text: string, opts: ReadOptions = {}): any {
+export function parse(text: string, opts: ReadOptions = {}): unknown {
   const { encoding = Encoding.JSON, format = Format.MULTI_JSON } = opts;
   switch (encoding) {
     case Encoding.String:
@@ -77,7 +77,10 @@ export function parse(text: string, opts: ReadOptions = {}): any {
   return text;
 }
 
-export async function read(path = "", opts: ReadOptions = {}): Promise<any> {
+export async function read(
+  path = "",
+  opts: ReadOptions = {},
+): Promise<unknown> {
   const { encoding = Encoding.JSON, format = Format.FromExtension } = opts;
   let readFormat = format;
   if (readFormat === Format.FromExtension && path) {
@@ -87,7 +90,7 @@ export async function read(path = "", opts: ReadOptions = {}): Promise<any> {
   return parse(text, { encoding: encoding, format: readFormat });
 }
 
-export function readSync(path = "", opts: ReadOptions = {}): Promise<any> {
+export function readSync(path = "", opts: ReadOptions = {}): unknown {
   const { encoding = Encoding.JSON, format = Format.FromExtension } = opts;
   let readFormat = format;
   if (readFormat === Format.FromExtension && path) {
