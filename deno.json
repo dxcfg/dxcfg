@@ -1,9 +1,9 @@
 {
-    "lint": {
-        "files": {
-            "exclude": [
-                "kubernetes/gen"
-            ]
-        }
+  "lint": {
+    "files": {
+      "exclude": [
+        "kubernetes/gen"
+      ]
     }
+  }
 }
