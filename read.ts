@@ -1,5 +1,5 @@
 import { Format } from "./write.ts";
-import { readJsonLines, tomlParse, yamlParse, yamlParseAll } from "./deps.ts";
+import { tomlParse, yamlParse, yamlParseAll } from "./deps.ts";
 
 export enum Encoding {
   Bytes = 0,
@@ -39,7 +39,16 @@ export function parse(text: string, opts: ReadOptions = {}): any {
         case Format.JSON:
           return JSON.parse(text);
         case Format.MULTI_JSON: {
-          const arr = readJsonLines(text);
+          const arr = text.split("\n")
+            .filter((line) => {
+              try {
+                JSON.parse(line);
+                return true;
+              } catch (_) {
+                return false;
+              }
+            })
+            .map((line) => JSON.parse(line));
           if (arr.length <= 1) {
             return JSON.parse(text);
           }
