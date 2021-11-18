@@ -9,7 +9,8 @@
 
 - For `developers` it can be used a familiar and expressive `frontend`.
 - For `operators` it can be used as a `backend` for enforcing schema validation,
-  security and resource usage policies.
+  security policies, resource usage policies and `hermeticity`:
+  [see hermeticity example](./examples/hermeticity).
 
 Its an `opinionated` port of [jkcfg](https://jkcfg.github.io/#/) API to deno and
 is a `work in progress`.
@@ -23,8 +24,8 @@ to generate a multi-resource yaml file.
 `index.js`
 
 ```js
-import { Format, param, write } from "https://deno.land/x/dxcfg@v0.0.11/mod.ts";
-import { api } from "https://deno.land/x/dxcfg@v0.0.11/kubernetes/mod.ts";
+import { Format, param, write } from "https://deno.land/x/dxcfg@v0.2.1/mod.ts";
+import { api } from "https://deno.land/x/dxcfg@v0.2.1/kubernetes/mod.ts";
 
 function resources(Values) {
   return [
