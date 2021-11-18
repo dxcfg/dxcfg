@@ -1,3 +1,4 @@
+// deno-lint-ignore-file
 export {
   api,
   apiextensions_apiserver,

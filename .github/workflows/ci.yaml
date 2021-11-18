@@ -23,7 +23,7 @@ jobs:
 
       - name: check linting
         if: matrix.os == 'ubuntu-latest'
-        run: deno lint
+        run: deno lint --config deno.json
 
       - name: run tests
         run: deno test --coverage=./cov --allow-read --allow-write --jobs 4
