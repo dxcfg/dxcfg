@@ -4,9 +4,12 @@
 [![codecov](https://codecov.io/gh/dxcfg/dxcfg/branch/main/graph/badge.svg?token=KEKZ52NXGP)](https://codecov.io/gh/dxcfg/dxcfg)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/dxcfg/mod.ts)
 
-`dxcfg` allows you to use javascript/typescript to generate configuration.
+`dxcfg` allows you to use javascript/typescript to generate configuration in the [Deno](https://deno.land) sandbox. 
 
-An `opinionated` port of
+- For `developers` it can be used a familiar and expressive `frontend`.
+- For `operators` it can be used as a `backend` for enforcing schema validation, security and resource usage policies.
+
+Its an `opinionated` port of
 [jkcfg](https://jkcfg.github.io/#/) API to deno and is a `work in progress`.
 
 ## Example Usage
