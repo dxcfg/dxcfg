@@ -21,11 +21,12 @@ Let's generate a multi resource yaml file using template literals. Here we use
 [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 to generate a multi-resource yaml file.
 
-`index.js`
+`index.js` uses the generated kubernetes types from the
+[dxcfg_kubernetes](https://github.com/dxcfg/dxcfg_kubernetes) module.
 
 ```js
 import { Format, param, write } from "https://deno.land/x/dxcfg@v0.2.1/mod.ts";
-import { api } from "https://deno.land/x/dxcfg@v0.2.1/kubernetes/mod.ts";
+import { api } from "https://deno.land/x/dxcfg_kubernetes@v0.1.0/mod.ts";
 
 function resources(Values) {
   return [
