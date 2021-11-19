@@ -8,6 +8,7 @@ definition. This example generates:
   picked up by the [Prometheus operator][prom-operator].
 
 ```bash
+mkdir billing
 deno run --unstable --allow-read --allow-write index.js # or
 deno run --unstable --allow-read --allow-write index.js -f billing.yaml
 ```
