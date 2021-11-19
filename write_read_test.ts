@@ -1,5 +1,5 @@
 import { assertEquals } from "./deps.ts";
-import { Format, stringify, write } from "./write.ts";
+import { Format, stdout, stringify, write } from "./write.ts";
 import { parse, read, readSync } from "./read.ts";
 
 const expected = {
@@ -137,4 +137,9 @@ Deno.test("read write multi yaml", async () => {
   await write(multiYaml, tmp, { format: Format.MULTI_YAML });
   const actual = await read(tmp);
   assertEquals(actual, multiYaml);
+});
+
+Deno.test("write json stdout", async () => {
+  // TODO(@adnaan): mock stdout for testing
+  await write(expected, stdout, { format: Format.YAML });
 });

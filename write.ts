@@ -1,5 +1,8 @@
 import { tomlStringify, yamlStringify } from "./deps.ts";
 
+export const stdout: unique symbol = Symbol("<stdout>");
+type WritePath = string | typeof stdout;
+
 export enum Format {
   FromExtension,
   JSON,
@@ -82,31 +85,36 @@ export function stringify(
 
 export async function write(
   value: unknown,
-  path = "",
+  path: WritePath = stdout,
   opts: WriteOptions = {},
 ): Promise<void> {
   if (!value) {
     throw new Error("value is undefined");
   }
-
   const {
     format = Format.FromExtension,
     indent = 2,
   } = opts;
 
+  const pathArg = (path === stdout) ? "" : path;
   let writeFormat = format;
-  if (writeFormat === Format.FromExtension && path) {
-    writeFormat = valuesFormatFromPath(path);
+  if (writeFormat === Format.FromExtension && pathArg) {
+    writeFormat = valuesFormatFromPath(pathArg);
+  }
+  const strValue = stringify(value, { format: writeFormat, indent: indent });
+  if (pathArg === "") {
+    await Deno.stdout.write(new TextEncoder().encode(strValue));
+    return;
   }
   await Deno.writeTextFile(
-    path,
-    stringify(value, { format: writeFormat, indent: indent }),
+    pathArg,
+    strValue,
   );
 }
 
 export function writeSync(
   value: unknown,
-  path = "",
+  path: WritePath = stdout,
   opts: WriteOptions = {},
 ): void {
   if (!value) {
@@ -117,14 +125,19 @@ export function writeSync(
     format = Format.FromExtension,
     indent = 2,
   } = opts;
-
+  const pathArg = (path === stdout) ? "" : path;
   let writeFormat = format;
   if (writeFormat === Format.FromExtension && path) {
-    writeFormat = valuesFormatFromPath(path);
+    writeFormat = valuesFormatFromPath(pathArg);
   }
 
+  const strValue = stringify(value, { format: writeFormat, indent: indent });
+  if (pathArg === "") {
+    Deno.stdout.writeSync(new TextEncoder().encode(strValue));
+    return;
+  }
   Deno.writeTextFileSync(
-    path,
-    stringify(value, { format: writeFormat, indent: indent }),
+    pathArg,
+    strValue,
   );
 }
