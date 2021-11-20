@@ -118,4 +118,7 @@ See more in [examples](./examples)
 - Don’t write custom APIs for components: grafana, tekton etc. Use the official
   SDK or expose a generated typescript api from openapi or CRD spec .
 
-## Roadmap (todo)
+## Roadmap
+
+- An example complex deployment pipeline on top of GKE/GCP
+- A typescript API for an efficient buildkit builder(written in Rust)
